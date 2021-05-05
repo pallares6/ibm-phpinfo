@@ -1,0 +1,23 @@
+name: ci
+on: 
+  push:
+    branches:
+      - main
+      
+jobs:
+  docker:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: test
+        run: |
+          set -x
+          docker build -t phpinfo:test .
+          docker network create phpinfo
+          docker run --detach --name test --network phpinfo --publish 80:8080 phpinfo:test
+          while true
+            do
+              sleep 10
+              docker logs test 2>& 1 | grep started && break
+            done
