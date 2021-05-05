@@ -1,1 +1,1 @@
-# ibm-phpinfo
+# phpinfo
